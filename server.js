@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require("apollo-server");
+const connectMongoDb = require("./config/db");
 
 const typeDefs = gql`
     type Query {
@@ -18,6 +19,12 @@ const server = new ApolloServer({
     resolvers,
   });
 
-server.listen().then(({ url }) => {
-    console.log(`Server running on ${url}`);
-});
+
+
+// Connect to Database
+//Connect to the database before listening
+connectMongoDb().then(() => {
+    server.listen().then(({ url }) => {
+        console.log(`Server running on ${url}`);
+    });
+})
